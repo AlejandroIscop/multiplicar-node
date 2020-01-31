@@ -1,36 +1,33 @@
+const argv = require('./config/yargs').argv;
+const colors = require('colors/safe');
 
-const argv = require('yargs')
-        .command('listar', 'Imprime en consola la tabla de multiplicar', {
-                base: {
-                        demand: true,
-                        alias : 'b'
-                },
-                limite: {
-                        alias : 'l',
-                        default:10
-                }
-        })
-        .help()
-        .argv;
+const { crearArchivo, listarTabla } = require('./multiplicar/multiplicar');
+
+let comando = argv._[0];
 
 
-//console.log( process )
-//console.log(process.argv)
+switch (comando) {
 
-let argv2 = process.argv;
-console.log(argv.base)
-console.log('Limite', argv.base) 
-//console.log(argv2)
-//**** CLG
+    case 'listar':
+        listarTabla(argv.base, argv.limite);
+        break;
 
-/*
+    case 'crear':
+        crearArchivo(argv.base, argv.limite)
+            .then(archivo => console.log(`Archivo creado: `, colors.green(archivo)))
+            .catch(e => console.log(e));
+        break;
 
-let parametro = argv[2];
-let base  = parametro.split('=')[1]
-//console.log(base);
+    default:
+        console.log('Comando no reconocido');
 
-crearArchivo(base)
-.then ( archivo => console.log(`Archivo Creado ${archivo }`))
-.catch(e => console.log(e));
-*/
+}
 
+
+
+// console.log(argv.base);
+
+
+
+// let parametro = argv[2];
+// let base = parametro.split('=')[1]
